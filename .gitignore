@@ -1,0 +1,54 @@
+# .gitignore for DevConnect .NET Solution
+
+# Ignore build output directories
+**/bin/
+**/obj/
+# Ignore user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore Rider and VSCode settings
+.idea/
+.vs/
+.vscode/
+
+# Ignore test results
+TestResults/
+*.trx
+*.coverage
+*.coveragejson
+
+# Ignore publish output
+publish/
+
+# Ignore NuGet packages
+*.nupkg
+packages/
+.nuget/
+
+# Ignore logs
+*.log
+
+# Ignore generated files
+*.Generated.cs
+
+# Ignore local secrets
+secrets.json
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore other common artifacts
+*.tmp
+*.bak
+*.swp
+
+# Ignore ReSharper files
+_ReSharper*/
+*.DotSettings.user
+
+# Ignore dotnet tool manifest
+.dotnet-tools.json
