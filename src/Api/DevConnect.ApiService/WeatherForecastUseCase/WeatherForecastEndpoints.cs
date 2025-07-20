@@ -1,6 +1,7 @@
 using DevConnect.Application.WeatherForecastUseCase;
 using DevConnect.Domain.WeatherForecastUseCase;
 using DevConnect.Infrastructure.WeatherForecastUseCase;
+using DevConnect.Shared.DTOs.WeatherForecastUseCase;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 

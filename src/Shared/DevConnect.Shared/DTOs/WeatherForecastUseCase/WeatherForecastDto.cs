@@ -1,4 +1,4 @@
-namespace DevConnect.Application.WeatherForecastUseCase;
+namespace DevConnect.Shared.DTOs.WeatherForecastUseCase;
 
 public sealed record WeatherForecastDto(
     Guid Id,

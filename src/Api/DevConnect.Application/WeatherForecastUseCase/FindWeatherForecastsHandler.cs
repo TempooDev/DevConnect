@@ -1,4 +1,5 @@
 using DevConnect.Domain.WeatherForecastUseCase;
+using DevConnect.Shared.DTOs.WeatherForecastUseCase;
 
 namespace DevConnect.Application.WeatherForecastUseCase;
 

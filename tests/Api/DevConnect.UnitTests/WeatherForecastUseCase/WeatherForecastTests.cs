@@ -1,14 +1,8 @@
-
-
-
-
-
-
 using System;
-using DevConnect.Domain.WeatherForecast;
+using DevConnect.Domain.WeatherForecastUseCase;
 using Xunit;
 
-namespace DevConnect.UnitTests.WeatherForecast;
+namespace DevConnect.UnitTests.WeatherForecastUseCase;
 
 public sealed class WeatherForecastTests
 {
@@ -21,7 +15,7 @@ public sealed class WeatherForecastTests
         var description = "Sunny";
         var date = new DateTime(2025, 7, 18);
 
-        var forecast = Domain.WeatherForecast.WeatherForecast.Register(id, temp, location, description, date);
+        var forecast = WeatherForecast.Register(id, temp, location, description, date);
 
         Assert.Equal(id, forecast.Id);
         Assert.Equal(temp, forecast.Temperature);
@@ -40,6 +34,6 @@ public sealed class WeatherForecastTests
         var description = "Cloudy";
         var date = DateTime.Now;
 
-        Assert.Throws<ArgumentException>(() => Domain.WeatherForecast.WeatherForecast.Register(id, temp, location, description, date));
+        Assert.Throws<ArgumentException>(() => WeatherForecast.Register(id, temp, location, description, date));
     }
 }

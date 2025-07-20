@@ -1,4 +1,5 @@
 using DevConnect.Domain.WeatherForecastUseCase;
+using DevConnect.Shared.DTOs.WeatherForecastUseCase;
 
 namespace DevConnect.Application.WeatherForecastUseCase;
 
@@ -14,7 +15,7 @@ public sealed class RegisterWeatherForecastHandler : IRegisterWeatherForecastHan
 
     public async Task<WeatherForecastDto> HandleAsync(RegisterWeatherForecastCommand command, CancellationToken cancellationToken = default)
     {
-        var forecast = WeatherForecast.Register( 
+        var forecast = WeatherForecast.Register(
             WeatherForecastId.NewId(),
             Temperature.FromCelsius(command.Temperature),
             command.Location,

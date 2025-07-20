@@ -2,10 +2,10 @@
 
 
 using System;
-using DevConnect.Domain.WeatherForecast;
+using DevConnect.Domain.WeatherForecastUseCase;
 using Xunit;
 
-namespace DevConnect.UnitTests.WeatherForecast;
+namespace DevConnect.UnitTests.WeatherForecastUseCase;
 
 public sealed class TemperatureTests
 {

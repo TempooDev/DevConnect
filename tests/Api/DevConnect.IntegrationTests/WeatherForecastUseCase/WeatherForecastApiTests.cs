@@ -1,7 +1,7 @@
 using System.Net.Http.Json;
 using Xunit;
 
-namespace DevConnect.IntegrationTests.WeatherForecastUseCase;
+namespace DevConnect.IntegrationTests.WeatherForecast;
 
 public sealed class WeatherForecastApiTests
 {
