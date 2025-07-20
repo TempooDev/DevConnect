@@ -1,0 +1,220 @@
+@page "/roles"
+@using DevConnect.Web.Services
+@using DevConnect.Shared.DTOs.AuthUseCase
+@using Microsoft.AspNetCore.Components.Authorization
+@inject IAuthApiService AuthApiService
+@inject AuthenticationStateProvider AuthStateProvider
+
+<PageTitle>Roles Test - DevConnect</PageTitle>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Available Roles Test</h3>
+                    <small class="text-muted">Vista temporal para probar la API de roles</small>
+                </div>
+                <div class="card-body">
+                    <AuthorizeView>
+                        <Authorized>
+                            <h5>Hola, @context.User.Identity?.Name!</h5>
+                            
+                            <div class="mb-3">
+                                <button class="btn btn-primary" @onclick="LoadRoles" disabled="@isLoading">
+                                    @if (isLoading)
+                                    {
+                                        <span class="spinner-border spinner-border-sm me-2"></span>
+                                    }
+                                    Get Available Roles
+                                </button>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(errorMessage))
+                            {
+                                <div class="alert alert-danger">
+                                    @errorMessage
+                                </div>
+                            }
+
+                            @if (roles != null && roles.Any())
+                            {
+                                <div class="alert alert-success">
+                                    <h6>Available Roles:</h6>
+                                    <ul class="mb-0">
+                                        @foreach (var role in roles)
+                                        {
+                                            <li>@role</li>
+                                        }
+                                    </ul>
+                                </div>
+                            }
+
+                            <hr />
+
+                            <h6>Change User Role (Admin Only)</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">User Email</label>
+                                        <input type="email" class="form-control" @bind="changeRoleModel.UserEmail" placeholder="user@example.com" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">New Role</label>
+                                        <select class="form-select" @bind="changeRoleModel.RoleName">
+                                            <option value="">Select Role</option>
+                                            @if (roles != null)
+                                            {
+                                                @foreach (var role in roles)
+                                                {
+                                                    <option value="@role">@role</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="mb-3">
+                                        <label class="form-label">&nbsp;</label>
+                                        <button class="btn btn-warning d-block" @onclick="ChangeUserRole" disabled="@isChangingRole">
+                                            @if (isChangingRole)
+                                            {
+                                                <span class="spinner-border spinner-border-sm"></span>
+                                            }
+                                            else
+                                            {
+                                                <span>Change</span>
+                                            }
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(roleChangeMessage))
+                            {
+                                <div class="alert alert-info">
+                                    @roleChangeMessage
+                                </div>
+                            }
+                        </Authorized>
+                        <NotAuthorized>
+                            <div class="alert alert-warning">
+                                <h5>Authentication Required</h5>
+                                <p>You need to be logged in to test the roles endpoint.</p>
+                                <a href="/login" class="btn btn-primary">Login</a>
+                            </div>
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>API Test Info</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Endpoints being tested:</strong></p>
+                    <ul>
+                        <li><code>GET /api/user-roles/available-roles</code></li>
+                        <li><code>PUT /api/user-roles/change-role</code></li>
+                    </ul>
+                    
+                    <p><strong>Requirements:</strong></p>
+                    <ul>
+                        <li>Valid JWT token</li>
+                        <li>Change role requires Admin permissions</li>
+                    </ul>
+
+                    <p><strong>Test Users:</strong></p>
+                    <ul>
+                        <li>admin@devconnect.com</li>
+                        <li>user@devconnect.com</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private IReadOnlyList<string>? roles;
+    private string errorMessage = string.Empty;
+    private string roleChangeMessage = string.Empty;
+    private bool isLoading = false;
+    private bool isChangingRole = false;
+    private ChangeRoleModel changeRoleModel = new();
+
+    private async Task LoadRoles()
+    {
+        isLoading = true;
+        errorMessage = string.Empty;
+
+        try
+        {
+            var result = await AuthApiService.GetAvailableRolesAsync();
+
+            if (result.IsSuccess)
+            {
+                roles = result.Value;
+            }
+            else
+            {
+                errorMessage = result.Error?.Message ?? "Failed to load roles";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task ChangeUserRole()
+    {
+        if (string.IsNullOrWhiteSpace(changeRoleModel.UserEmail) || string.IsNullOrWhiteSpace(changeRoleModel.RoleName))
+        {
+            roleChangeMessage = "Please enter both user email and select a role";
+            return;
+        }
+
+        isChangingRole = true;
+        roleChangeMessage = string.Empty;
+
+        try
+        {
+            var changeRoleDto = new ChangeUserRoleDto(changeRoleModel.UserEmail, changeRoleModel.RoleName);
+
+            var result = await AuthApiService.ChangeUserRoleAsync(changeRoleDto);
+
+            if (result.IsSuccess)
+            {
+                roleChangeMessage = $"Success: {result.Value}";
+                changeRoleModel = new(); // Reset form
+            }
+            else
+            {
+                roleChangeMessage = $"Failed: {result.Error?.Message}";
+            }
+        }
+        catch (Exception ex)
+        {
+            roleChangeMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            isChangingRole = false;
+        }
+    }
+
+    public class ChangeRoleModel
+    {
+        public string UserEmail { get; set; } = string.Empty;
+        public string RoleName { get; set; } = string.Empty;
+    }
+}

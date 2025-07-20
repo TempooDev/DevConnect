@@ -1,5 +1,7 @@
 using DevConnect.Web;
 using DevConnect.Web.Components;
+using DevConnect.Web.Services;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,12 +14,28 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddOutputCache();
 
+// Auth services
+builder.Services.AddScoped<ITokenStorage, LocalStorageTokenStorage>();
+builder.Services.AddScoped<CustomAuthenticationStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider>(provider => provider.GetRequiredService<CustomAuthenticationStateProvider>());
+
+// HttpClient for API calls with same configuration as WeatherApiClient
+builder.Services.AddHttpClient<IAuthApiService, AuthApiService>(client =>
+{
+    // This URL uses "https+http://" to indicate HTTPS is preferred over HTTP.
+    // Learn more about service discovery scheme resolution at https://aka.ms/dotnet/sdschemes.
+    client.BaseAddress = new("https+http://apiservice");
+});
+
 builder.Services.AddHttpClient<WeatherApiClient>(client =>
     {
         // This URL uses "https+http://" to indicate HTTPS is preferred over HTTP.
         // Learn more about service discovery scheme resolution at https://aka.ms/dotnet/sdschemes.
         client.BaseAddress = new("https+http://apiservice");
     });
+
+// Add authorization
+builder.Services.AddAuthorizationCore();
 
 var app = builder.Build();
 

@@ -1,6 +1,25 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using DevConnect.Web.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@inject CustomAuthenticationStateProvider AuthStateProvider
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">DevConnect</a>
+        
+        <AuthorizeView>
+            <Authorized>
+                <div class="navbar-nav ms-auto">
+                    <span class="navbar-text me-3">Hello, @context.User.Identity?.Name!</span>
+                    <button class="btn btn-outline-light btn-sm" @onclick="Logout">Logout</button>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <div class="navbar-nav ms-auto">
+                    <a href="/login" class="btn btn-outline-light btn-sm me-2">Login</a>
+                    <a href="/register" class="btn btn-light btn-sm">Register</a>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
     </div>
 </div>
 
@@ -25,5 +44,22 @@
                 <span class="bi bi-list-nested" aria-hidden="true"></span> Weather
             </NavLink>
         </div>
+
+        <AuthorizeView>
+            <Authorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="roles">
+                        <span class="bi bi-shield-check" aria-hidden="true"></span> Roles Test
+                    </NavLink>
+                </div>
+            </Authorized>
+        </AuthorizeView>
     </nav>
 </div>
+
+@code {
+    private async Task Logout()
+    {
+        await AuthStateProvider.MarkUserAsLoggedOutAsync();
+    }
+}

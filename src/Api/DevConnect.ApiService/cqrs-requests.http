@@ -1,0 +1,71 @@
+### DevConnect API - CQRS Implementation Tests
+### Updated endpoints with Command Query Responsibility Segregation
+
+### Variables
+@baseUrl = http://localhost:5257
+@token = {{login.response.body.token}}
+
+### 1. Register a new user (Command)
+# POST {{baseUrl}}/api/auth/register
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "admin@devconnect.com",
+  "password": "Password123!"
+}
+
+### 2. Login user (Query)
+# POST {{baseUrl}}/api/auth/login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@devconnect.com",
+  "password": "Password123!"
+}
+
+### 3. Register another user for role testing
+# POST {{baseUrl}}/api/auth/register
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "user@devconnect.com",
+  "password": "Password123!"
+}
+
+### 4. Get available roles (Query)
+# GET {{baseUrl}}/api/user-roles/available-roles
+GET {{baseUrl}}/api/user-roles/available-roles
+Authorization: Bearer {{token}}
+
+### 5. Change user role (Command) - Admin only
+# PUT {{baseUrl}}/api/user-roles/change-role
+PUT {{baseUrl}}/api/user-roles/change-role
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "userEmail": "user@devconnect.com",
+  "roleName": "Administrator"
+}
+
+### 6. Test unauthorized access (should fail without admin role)
+# PUT {{baseUrl}}/api/user-roles/change-role
+PUT {{baseUrl}}/api/user-roles/change-role
+Authorization: Bearer invalid_token
+Content-Type: application/json
+
+{
+  "userEmail": "user@devconnect.com",
+  "roleName": "User"
+}
+
+### Notes:
+### - CQRS pattern implemented with separate Commands and Queries
+### - Commands: RegisterUserCommand, ChangeUserRoleCommand
+### - Queries: LoginUserQuery, GetAvailableRolesQuery
+### - Each operation has its own dedicated handler
+### - No services injected directly into endpoints
+### - Clean separation of concerns following CQRS principles

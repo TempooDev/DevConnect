@@ -8,6 +8,12 @@
 
   <ItemGroup>
 	  <ProjectReference Include="..\..\..\aspire\DevConnect.ServiceDefaults\DevConnect.ServiceDefaults.csproj" />
+	  <ProjectReference Include="..\..\Shared\DevConnect.Shared\DevConnect.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="9.0.0" />
   </ItemGroup>
 
 </Project>

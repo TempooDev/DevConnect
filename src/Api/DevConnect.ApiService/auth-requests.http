@@ -1,0 +1,32 @@
+### Register a new user
+POST http://localhost:5005/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "Password123!",
+  "confirmPassword": "Password123!"
+}
+
+### Login with user
+POST http://localhost:5005/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "Password123!"
+}
+
+### Get available roles (requires authentication)
+GET http://localhost:5005/api/user-roles/available-roles
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjcyNmQ1YzgyLTE3MGYtNDFhNC04NDBhLTI2MzIzNjBhZGI4OSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6InRlc3RAZXhhbXBsZS5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNzUzMDM5MzkzLCJpc3MiOiJEZXZDb25uZWN0IiwiYXVkIjoiRGV2Q29ubmVjdCJ9.1ra7Oqla3pg7mhm98mVQeyLvvh9jQpd1EM--NkAXyAM
+
+### Change user role (requires Administrator role)
+PUT http://localhost:5005/api/user-roles/change-role
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjcyNmQ1YzgyLTE3MGYtNDFhNC04NDBhLTI2MzIzNjBhZGI4OSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL2VtYWlsYWRkcmVzcyI6InRlc3RAZXhhbXBsZS5jb20iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNzUzMDM5MzkzLCJpc3MiOiJEZXZDb25uZWN0IiwiYXVkIjoiRGV2Q29ubmVjdCJ9.1ra7Oqla3pg7mhm98mVQeyLvvh9jQpd1EM--NkAXyAM
+
+{
+  "userId": "726d5c82-170f-41a4-840a-2632360adb89",
+  "roleName": "Administrator"
+}

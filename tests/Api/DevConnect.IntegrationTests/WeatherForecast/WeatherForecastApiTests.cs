@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using Xunit;
 
 namespace DevConnect.IntegrationTests.WeatherForecastUseCase;

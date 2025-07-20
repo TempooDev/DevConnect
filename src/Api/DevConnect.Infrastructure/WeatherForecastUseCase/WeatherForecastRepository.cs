@@ -5,9 +5,9 @@ namespace DevConnect.Infrastructure.WeatherForecastUseCase;
 
 public sealed class WeatherForecastRepository : IWeatherForecastRepository
 {
-    private readonly WeatherForecastDbContext _dbContext;
+    private readonly ApplicationDbContext _dbContext;
 
-    public WeatherForecastRepository(WeatherForecastDbContext dbContext)
+    public WeatherForecastRepository(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
     }
